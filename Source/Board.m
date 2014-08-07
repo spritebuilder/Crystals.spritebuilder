@@ -147,6 +147,17 @@
     {
         _board[crystal.x][crystal.y] = NULL;
         [self removeChild:crystal];
+        
+        CCParticleSystem* particlesBack = (CCParticleSystem*)[CCBReader load:[NSString stringWithFormat:@"Particles/explo-%d", crystal.type]];
+        particlesBack.position = ccp(crystal.x*CRYSTAL_SIZE + CRYSTAL_SIZE/2, crystal.y * CRYSTAL_SIZE + CRYSTAL_SIZE/2);
+        particlesBack.autoRemoveOnFinish = YES;
+        
+        CCParticleSystem* particlesFront = (CCParticleSystem*)[CCBReader load:@"Particles/explo"];
+        particlesFront.position = ccp(crystal.x*CRYSTAL_SIZE + CRYSTAL_SIZE/2, crystal.y * CRYSTAL_SIZE + CRYSTAL_SIZE/2);
+        particlesFront.autoRemoveOnFinish = YES;
+        
+        [self addChild:particlesBack z:1];
+        [self addChild:particlesFront z:2];
     }
     
     for (int j = 0; j < BOARD_WIDTH; j++)
