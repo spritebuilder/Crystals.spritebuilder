@@ -1,0 +1,17 @@
+info face="Vinegar" size=150 bold=0 italic=0 charset="" unicode=0 stretchH=100 smooth=1 aa=1 padding=0,0,0,0 spacing=0,0
+common lineHeight=214 base=190 scaleW=512 scaleH=512 pages=1 packed=0
+page id=0 file="Crystals.png"
+chars count=12
+char id=32 x=2 y=460 width=0 height=0 xoffset=0 yoffset=147 xadvance=91 page=0 chnl=0
+char id=48 x=234 y=2 width=112 height=152 xoffset=6 yoffset=36 xadvance=91 page=0 chnl=0
+char id=49 x=336 y=156 width=94 height=148 xoffset=16 yoffset=39 xadvance=91 page=0 chnl=0
+char id=50 x=120 y=308 width=106 height=150 xoffset=7 yoffset=37 xadvance=91 page=0 chnl=0
+char id=51 x=348 y=2 width=106 height=152 xoffset=8 yoffset=36 xadvance=91 page=0 chnl=0
+char id=52 x=2 y=2 width=116 height=148 xoffset=2 yoffset=39 xadvance=91 page=0 chnl=0
+char id=53 x=120 y=156 width=106 height=150 xoffset=9 yoffset=38 xadvance=91 page=0 chnl=0
+char id=54 x=120 y=2 width=112 height=152 xoffset=5 yoffset=36 xadvance=91 page=0 chnl=0
+char id=55 x=228 y=156 width=106 height=148 xoffset=16 yoffset=39 xadvance=91 page=0 chnl=0
+char id=56 x=2 y=306 width=112 height=152 xoffset=5 yoffset=36 xadvance=91 page=0 chnl=0
+char id=57 x=2 y=152 width=112 height=152 xoffset=5 yoffset=36 xadvance=91 page=0 chnl=0
+char id=58 x=432 y=156 width=58 height=112 xoffset=16 yoffset=77 xadvance=91 page=0 chnl=0
+kernings count=0

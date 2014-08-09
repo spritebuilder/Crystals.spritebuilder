@@ -9,5 +9,8 @@
 #import "CCNode.h"
 
 @interface MainScene : CCNode
-
+{
+    CCLabelTTF* _lblHighScore;
+    CCLabelTTF* _lblLastScore;
+}
 @end

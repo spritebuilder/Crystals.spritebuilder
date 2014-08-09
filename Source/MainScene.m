@@ -7,16 +7,27 @@
 //
 
 #import "MainScene.h"
+#import "GameGlobals.h"
 
 @implementation MainScene
 
 - (void) didLoadFromCCB
 {
+    [OALSimpleAudio sharedInstance];
+    
     [[CCDirector sharedDirector] setDisplayStats:YES];
+    
+    // Popuplate score labels
+    GameGlobals* g = [GameGlobals globals];
+    
+    _lblHighScore.string = [NSString stringWithFormat:@"%d",g.highScore];
+    _lblLastScore.string = [NSString stringWithFormat:@"%d",g.lastScore];
 }
 
 - (void) pressedPlay:(CCButton*)button
 {
+    [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/click.wav"];
+    
     [self.animationManager runAnimationsForSequenceNamed:@"outro"];
 }
 

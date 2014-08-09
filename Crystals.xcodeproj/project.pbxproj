@@ -27,6 +27,8 @@
 		B73789871807631A0076A88C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = B73789851807631A0076A88C /* main.m */; };
 		B737898A1807642B0076A88C /* libcocos2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B737894B180761A90076A88C /* libcocos2d.a */; };
 		B7378994180767190076A88C /* MainScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B7378993180767190076A88C /* MainScene.m */; };
+		B74E003B1995B84000E7B4D1 /* PauseLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = B74E003A1995B84000E7B4D1 /* PauseLayer.m */; };
+		B74E003F1995BCAE00E7B4D1 /* GameGlobals.m in Sources */ = {isa = PBXBuildFile; fileRef = B74E003E1995BCAE00E7B4D1 /* GameGlobals.m */; };
 		B77F1B3217B978D7009739AE /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B3117B978D7009739AE /* QuartzCore.framework */; };
 		B77F1B3417B978D7009739AE /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B3317B978D7009739AE /* OpenGLES.framework */; };
 		B77F1B3617B978D7009739AE /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B3517B978D7009739AE /* OpenAL.framework */; };
@@ -82,6 +84,10 @@
 		B73789861807631A0076A88C /* Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Prefix.pch; path = Source/Prefix.pch; sourceTree = SOURCE_ROOT; };
 		B7378992180767190076A88C /* MainScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MainScene.h; path = Source/MainScene.h; sourceTree = "<group>"; };
 		B7378993180767190076A88C /* MainScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MainScene.m; path = Source/MainScene.m; sourceTree = "<group>"; };
+		B74E00391995B84000E7B4D1 /* PauseLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PauseLayer.h; path = Source/PauseLayer.h; sourceTree = "<group>"; };
+		B74E003A1995B84000E7B4D1 /* PauseLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PauseLayer.m; path = Source/PauseLayer.m; sourceTree = "<group>"; };
+		B74E003D1995BCAE00E7B4D1 /* GameGlobals.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameGlobals.h; path = Source/GameGlobals.h; sourceTree = "<group>"; };
+		B74E003E1995BCAE00E7B4D1 /* GameGlobals.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameGlobals.m; path = Source/GameGlobals.m; sourceTree = "<group>"; };
 		B77F1B2E17B978D7009739AE /* Crystals.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Crystals.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B77F1B3117B978D7009739AE /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		B77F1B3317B978D7009739AE /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
@@ -144,6 +150,10 @@
 				B7E7AD981992F95200DD61CD /* Crystal.m */,
 				B7E7AD9A19930E2800DD61CD /* Board.h */,
 				B7E7AD9B19930E2800DD61CD /* Board.m */,
+				B74E00391995B84000E7B4D1 /* PauseLayer.h */,
+				B74E003A1995B84000E7B4D1 /* PauseLayer.m */,
+				B74E003D1995BCAE00E7B4D1 /* GameGlobals.h */,
+				B74E003E1995BCAE00E7B4D1 /* GameGlobals.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -357,9 +367,11 @@
 			files = (
 				B7E7AD9C19930E2800DD61CD /* Board.m in Sources */,
 				B7E7AD991992F95200DD61CD /* Crystal.m in Sources */,
+				B74E003B1995B84000E7B4D1 /* PauseLayer.m in Sources */,
 				B737893F1807617C0076A88C /* AppDelegate.m in Sources */,
 				B7378994180767190076A88C /* MainScene.m in Sources */,
 				B7E7AD961992F7CC00DD61CD /* GameScene.m in Sources */,
+				B74E003F1995BCAE00E7B4D1 /* GameGlobals.m in Sources */,
 				B73789871807631A0076A88C /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

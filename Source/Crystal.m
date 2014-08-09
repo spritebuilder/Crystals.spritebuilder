@@ -66,7 +66,22 @@ static CCEffectReflection* _crystalEffect = NULL;
 
 - (void) fixedUpdate:(CCTime)delta
 {
-    if (_speed < 0) _speed -= 0.6; //_speed *= 1.05;
+    if (_gameOver)
+    {
+        _speed -= 0.1;
+    }
+    else
+    {
+        if (_speed < 0) _speed -= 0.6;
+    }
+}
+
+- (void) setupGameOverSpeeds
+{
+    _speed = CCRANDOM_MINUS1_1() * 4;
+    _xSpeed = CCRANDOM_MINUS1_1() * 4;
+    
+    _gameOver = YES;
 }
 
 @end

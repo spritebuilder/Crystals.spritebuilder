@@ -9,10 +9,13 @@
 #import "GameScene.h"
 #import "Crystal.h"
 #import "Board.h"
+#import "GameGlobals.h"
 
 #define REFLECTION_ANIM_FRAMES 1500
 
 static __weak GameScene* _currentGameScene;
+
+#pragma mark Intialization
 
 @implementation GameScene
 
@@ -28,10 +31,52 @@ static __weak GameScene* _currentGameScene;
     self.board.paused = YES;
 }
 
+#pragma mark Callbacks from Buttons
+
 - (void) pressedPause:(CCButton*) sender
 {
+    [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/click.wav"];
+    
+    self.board.paused = YES;
+    self.board.userInteractionEnabled = NO;
+    
+    _pausedLayer.visible = YES;
+}
+
+- (void) pressedContinue
+{
+    [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/click.wav"];
+    
+    self.board.paused = NO;
+    self.board.userInteractionEnabled = YES;
+    
+    _pausedLayer.visible = NO;
+}
+
+- (void) pressedGiveUp
+{
+    [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/click.wav"];
+    
+    [self.animationManager runAnimationsForSequenceNamed:@"outro"];
+}
+
+#pragma mark Callbacks from Timelines
+
+- (void) startGame
+{
+    self.board.paused = NO;
+}
+
+- (void) exitToMainScene
+{
+    // Save score
+    [GameGlobals globals].lastScore = _board.score;
+    [[GameGlobals globals] store];
+    
     [[CCDirector sharedDirector] replaceScene:[CCBReader loadAsScene:@"MainScene"]];
 }
+
+#pragma mark Update
 
 - (void) fixedUpdate:(CCTime)delta
 {
@@ -45,10 +90,7 @@ static __weak GameScene* _currentGameScene;
     _frame += 1;
 }
 
-- (void) startGame
-{
-    self.board.paused = NO;
-}
+#pragma mark Cleanup
 
 - (void) onExit
 {

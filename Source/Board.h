@@ -21,5 +21,27 @@
     NSMutableArray* _fallingCol[BOARD_WIDTH];
     
     BOOL _crystalsLandedThisFrame;
+    
+    // Counting consecutive moves
+    long _numConsecutiveMoves;
+    long _lastMoveFrame;
+    long _frame;
+    
+    // Bonus mode
+    BOOL _bonusMode;
+    long _bonusModeStartFrame;
+    CCEffectBrightness* _bonusModeEffect;
+    CCParticleSystem* _bonusParticles;
+    
+    // Game over
+    BOOL _gameOver;
+    
+    // Score & Time
+    int _score;
+    NSMutableArray* _gameOverCrystals;
+    BOOL _startedEndTimer;
 }
+
+@property (nonatomic,readonly) int score;
+
 @end

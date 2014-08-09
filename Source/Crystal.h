@@ -9,6 +9,10 @@
 #import "CCSprite.h"
 
 @interface Crystal : CCSprite
+{
+    BOOL _gameOver;
+}
+
 
 @property (nonatomic,readwrite) int type;
 @property (nonatomic,readwrite) int x;
@@ -16,10 +20,14 @@
 
 @property (nonatomic,assign) float speed;
 
+@property (nonatomic,assign) float xSpeed;
+
 + (Crystal*) crystalOfType:(int)type;
 
 + (void) cleanup;
 
 - (void) setStartingSpeed;
+
+- (void) setupGameOverSpeeds;
 
 @end

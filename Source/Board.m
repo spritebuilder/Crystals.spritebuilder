@@ -7,9 +7,13 @@
 //
 
 #import "Board.h"
+#import "GameScene.h"
 #import "Crystal.h"
 
-
+#define FRAMES_UNTIL_CONSECUTIVE_MOVES_RESET 60
+#define MAX_CONSECUTIVE_MOVES 5
+#define BONUS_MODE_NUM_CYCLE_FRAMES 60
+#define GAME_DURATION (60 * 60 + 130)
 
 @implementation Board
 
@@ -28,16 +32,30 @@
         }
     }
     
+    _gameOverCrystals = [NSMutableArray array];
+    
     return self;
 }
 
 - (void) didLoadFromCCB
 {
     self.userInteractionEnabled = YES;
+    _bonusModeEffect = [CCEffectBrightness effectWithBrightness:0.0];
+    
+    _bonusParticles.zOrder = 2;
+    [_bonusParticles stopSystem];
+    
+    [self resetScore];
 }
 
 - (void) fixedUpdate:(CCTime)delta
 {
+    if (_gameOver)
+    {
+        [self animateGameOver];
+        return;
+    }
+    
     _crystalsLandedThisFrame = NO;
     
     for (int i = 0; i < BOARD_WIDTH; i++)
@@ -60,11 +78,33 @@
         [self solidifyCrystalsInCol:i];
     }
     
+    // Check for possible moves
+    if (_crystalsLandedThisFrame && ![self hasPossibleMoves])
+    {
+        [self makePossibleMove];
+    }
+    
+    // Play sounds for crystals that's landing
     if (_crystalsLandedThisFrame)
     {
         int num = CCRANDOM_0_1()*4;
         [[OALSimpleAudio sharedInstance] playEffect:[NSString stringWithFormat:@"Sounds/tap-%d.wav",num]];
     }
+    
+    // Reset consecutive moves if player plays to slow
+    if (_frame - _lastMoveFrame > FRAMES_UNTIL_CONSECUTIVE_MOVES_RESET)
+    {
+        _numConsecutiveMoves = 0;
+        [self endBonusMode];
+    }
+    
+    // Animate bonus mode
+    [self animateBonusMode];
+    
+    [self updateTimeDisplay];
+    
+    // Increment frame count
+    _frame++;
 }
 
 #pragma mark Handle Touches
@@ -83,6 +123,93 @@
     if (crystals.count >= 3)
     {
         [self removeCrystals:crystals];
+        
+        // Increment consecutive moves
+        _numConsecutiveMoves++;
+        if (_numConsecutiveMoves > MAX_CONSECUTIVE_MOVES) _numConsecutiveMoves = MAX_CONSECUTIVE_MOVES;
+        
+        _lastMoveFrame = _frame;
+        
+        // Play sound effect
+        [[OALSimpleAudio sharedInstance] playEffect:[NSString stringWithFormat:@"Sounds/gem-%d.wav", (int)_numConsecutiveMoves-1]];
+        
+        if (_numConsecutiveMoves == MAX_CONSECUTIVE_MOVES && !_bonusMode)
+        {
+            [self startBonusMode];
+        }
+        
+        // Add score
+        int score = (int)crystals.count;
+        if (_bonusMode) score *= 3;
+        
+        [self addScore:score];
+    }
+    else
+    {
+        // Tapped a non-combination
+        _numConsecutiveMoves = 0;
+        [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/miss.wav"];
+        
+        [self endBonusMode];
+    }
+}
+
+#pragma mark Game Modes
+
+- (void) startBonusMode
+{
+    _bonusMode = YES;
+    
+    self.effect = _bonusModeEffect;
+    _bonusModeStartFrame = _frame;
+    
+    [_bonusParticles resetSystem];
+}
+
+- (void) endBonusMode
+{
+    _bonusMode = NO;
+    
+    [_bonusParticles stopSystem];
+}
+
+- (void) animateBonusMode
+{
+    if (!_bonusMode)
+    {
+        if (self.effect)
+        {
+            // Fade out the effect
+            float brighness = _bonusModeEffect.brightness;
+            
+            brighness -= 0.5 / (float)BONUS_MODE_NUM_CYCLE_FRAMES;
+            
+            if (brighness > 0)
+            {
+                _bonusModeEffect.brightness = brighness;
+            }
+            else
+            {
+                self.effect = NULL;
+            }
+        }
+        
+        return;
+    }
+    
+    long frame = _frame - _bonusModeStartFrame;
+    
+    // Normalized position in brightness cycle
+    float cyclePos = frame % BONUS_MODE_NUM_CYCLE_FRAMES;
+    cyclePos = cyclePos / (float) BONUS_MODE_NUM_CYCLE_FRAMES;
+    
+    if (cyclePos < 0.5)
+    {
+        _bonusModeEffect.brightness = cyclePos;
+    }
+    else
+    {
+        _bonusModeEffect.brightness = 1.0 - cyclePos;
     }
 }
 
@@ -192,6 +319,31 @@
     }
 }
 
+- (void) makePossibleMove
+{
+    // Make a possible move at a random spot at the board
+    int x = CCRANDOM_0_1() * (BOARD_WIDTH - 1);
+    int y = CCRANDOM_0_1() * (BOARD_HEIGHT - 1);
+    
+    // Recolor two bordering gems
+    int type = _board[x][y].type;
+    
+    [self recolorCrystalAtX:x+1 Y:y toType:type];
+    [self recolorCrystalAtX:x Y:y+1 toType:type];
+}
+
+- (void) recolorCrystalAtX:(int)x Y:(int)y toType:(int)type
+{
+    [self removeChild:_board[x][y]];
+    
+    Crystal* c = [Crystal crystalOfType:type];
+    c.x = x;
+    c.y = y;
+    _board[x][y] = c;
+    c.position = ccp(x * CRYSTAL_SIZE, y * CRYSTAL_SIZE);
+    [self addChild:c];
+}
+
 #pragma mark Analyze Board
 
 - (int) numCrystalsInCol:(int)col
@@ -286,6 +438,114 @@
     [self addConnectedCrystalsOfType:type atPosX:x-1 Y:y toArray:array];
     [self addConnectedCrystalsOfType:type atPosX:x Y:y+1 toArray:array];
     [self addConnectedCrystalsOfType:type atPosX:x Y:y-1 toArray:array];
+}
+
+- (BOOL) hasPossibleMoves
+{
+    // If there are falling gems, there is still a chace for a match
+    for (int i = 0; i < BOARD_WIDTH; i++)
+    {
+        if (_fallingCol[i].count > 0) return YES;
+    }
+    
+    // Check all positions on the board
+    for (int i = 0; i < BOARD_WIDTH; i++)
+    {
+        for (int j = 0; j < BOARD_HEIGHT; j++)
+        {
+            if ([self connectedCrystalsAtPosX:i Y:j].count >= 3) return YES;
+        }
+    }
+    
+    return NO;
+}
+
+#pragma mark Score & Time & Game Over
+
+- (void) resetScore
+{
+    _score = 0;
+    [GameScene currentGameScene].lblScore.string = @"0";
+}
+
+- (void) addScore:(int)score
+{
+    _score += score;
+    [GameScene currentGameScene].lblScore.string = [NSString stringWithFormat:@"%d",_score];
+}
+
+- (int) secondsLeft
+{
+    int framesLeft = (int)(GAME_DURATION - _frame);
+    if (framesLeft < 0) framesLeft = 0;
+    
+    return framesLeft/60;
+}
+
+- (void) updateTimeDisplay
+{
+    int secs = [self secondsLeft];
+    
+    NSString* timeStr = NULL;
+    if (secs >= 60) timeStr = @"1:00";
+    else timeStr = [NSString stringWithFormat:@"0:%02d", secs];
+    
+    [GameScene currentGameScene].lblTime.string = timeStr;
+    
+    if (!_gameOver && secs == 0)
+    {
+        [self startGameOver];
+    }
+    
+    if (!_startedEndTimer && secs <= 5)
+    {
+        _startedEndTimer = YES;
+        [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/timer.wav"];
+    }
+}
+
+- (void) startGameOver
+{
+    self.userInteractionEnabled = NO;
+    _gameOver = YES;
+    
+    // Move crystals to array with for game over animation
+    for (int i = 0; i < BOARD_WIDTH; i++)
+    {
+        for (int j = 0; j < BOARD_HEIGHT; j++)
+        {
+            if (_board[i][j])
+            {
+                [_gameOverCrystals addObject:_board[i][j]];
+                _board[i][j] = NULL;
+            }
+        }
+        
+        // Move any falling crystals to game over array
+        for (Crystal* crystal in _fallingCol[i])
+        {
+            [_gameOverCrystals addObject:crystal];
+        }
+        [_fallingCol[i] removeAllObjects];
+    }
+    
+    for (Crystal* crystal in _gameOverCrystals)
+    {
+        [crystal setupGameOverSpeeds];
+    }
+    
+    [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/endgame.wav"];
+    
+    [[GameScene currentGameScene].animationManager runAnimationsForSequenceNamed:@"outro"];
+}
+
+- (void) animateGameOver
+{
+    for (Crystal* crystal in _gameOverCrystals)
+    {
+        CGPoint pos = crystal.position;
+        crystal.position = ccp(pos.x + crystal.xSpeed, pos.y + crystal.speed);
+    }
 }
 
 @end

@@ -12,6 +12,7 @@
 
 @interface GameScene : CCNode
 {
+    CCNode* _pausedLayer;
     long _frame;
 }
 
@@ -22,4 +23,10 @@
 
 @property (nonatomic,strong) Board* board;
 
+@property (nonatomic,strong) CCLabelBMFont* lblScore;
+@property (nonatomic,strong) CCLabelBMFont* lblTime;
+
+// Callbacks from PauseLayer
+- (void) pressedContinue;
+- (void) pressedGiveUp;
 @end

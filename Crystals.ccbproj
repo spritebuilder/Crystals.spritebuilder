@@ -78,6 +78,17 @@
 			<key>previewFolderHidden</key>
 			<true/>
 		</dict>
+		<key>Sounds/timer.wav</key>
+		<dict>
+			<key>format_android_sound</key>
+			<integer>0</integer>
+			<key>format_android_sound_quality</key>
+			<integer>0</integer>
+			<key>format_ios_sound</key>
+			<integer>0</integer>
+			<key>format_ios_sound_quality</key>
+			<integer>0</integer>
+		</dict>
 		<key>Sprites</key>
 		<dict/>
 		<key>Sprites/button-pause.png</key>
