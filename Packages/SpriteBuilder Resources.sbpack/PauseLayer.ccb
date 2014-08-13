@@ -10,7 +10,7 @@
 		<false/>
 	</dict>
 	<key>UUID</key>
-	<integer>7</integer>
+	<integer>8</integer>
 	<key>centeredOrigin</key>
 	<false/>
 	<key>currentResolution</key>
@@ -243,7 +243,7 @@
 						<string>String</string>
 						<key>value</key>
 						<array>
-							<string>Continue</string>
+							<string>CONTINUE</string>
 							<false/>
 						</array>
 					</dict>
@@ -326,7 +326,7 @@
 						<key>type</key>
 						<string>FontTTF</string>
 						<key>value</key>
-						<string>Helvetica</string>
+						<string>GillSans</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -453,6 +453,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -569,7 +571,7 @@
 						<string>String</string>
 						<key>value</key>
 						<array>
-							<string>Give Up</string>
+							<string>GIVE UP</string>
 							<false/>
 						</array>
 					</dict>
@@ -652,7 +654,7 @@
 						<key>type</key>
 						<string>FontTTF</string>
 						<key>value</key>
-						<string>Helvetica</string>
+						<string>GillSans</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -860,7 +862,7 @@
 						<key>type</key>
 						<string>FontTTF</string>
 						<key>value</key>
-						<string>Helvetica</string>
+						<string>GillSans-Bold</string>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -917,9 +919,9 @@
 						<string>Color4</string>
 						<key>value</key>
 						<array>
-							<real>0.44961491227149963</real>
-							<real>0.14377045631408691</real>
-							<real>0.60115730762481689</real>
+							<real>0.82923996448516846</real>
+							<real>0.0</real>
+							<real>0.99831432104110718</real>
 							<real>1</real>
 						</array>
 					</dict>
@@ -930,9 +932,9 @@
 						<string>Color4</string>
 						<key>value</key>
 						<array>
-							<real>0.96895104646682739</real>
-							<real>0.75756531953811646</real>
-							<real>1</real>
+							<real>0.37299013137817383</real>
+							<real>0.049272466450929642</real>
+							<real>0.13034424185752869</real>
 							<real>1</real>
 						</array>
 					</dict>
@@ -1113,7 +1115,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>1.1333333253860474</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
