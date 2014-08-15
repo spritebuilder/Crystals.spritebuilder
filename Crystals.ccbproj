@@ -43,7 +43,7 @@
 	<key>publishEnablediPhone</key>
 	<true/>
 	<key>publishEnvironment</key>
-	<integer>1</integer>
+	<integer>0</integer>
 	<key>publishResolution_android_phone</key>
 	<true/>
 	<key>publishResolution_android_phonehd</key>
@@ -177,10 +177,8 @@
 		</dict>
 	</dict>
 	<key>versionStr</key>
-	<string>Version: 2.1.0-beta.2
-Sku: 
-GitHub: 
-f3e42d35a3
+	<string>Version: 1.2.0-beta
+GitHub: 2530b2fba8
 </string>
 </dict>
 </plist>
