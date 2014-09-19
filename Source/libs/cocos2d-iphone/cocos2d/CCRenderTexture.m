@@ -38,6 +38,8 @@
 #import "CCNode_Private.h"
 #import "CCRenderer_private.h"
 #import "CCRenderTexture_Private.h"
+#import "CCRenderDispatch.h"
+
 #if __CC_PLATFORM_MAC
 #import <ApplicationServices/ApplicationServices.h>
 #endif
@@ -61,7 +63,7 @@
 		BOOL copyUniforms = self.hasDefaultShaderUniforms;
 		
 		// Create an uncached renderstate so the texture can be released before the renderstate cache is flushed.
-		_renderState = [[CCRenderState alloc] initWithBlendMode:_blendMode shader:_shader shaderUniforms:self.shaderUniforms copyUniforms:copyUniforms];
+		_renderState = [CCRenderState renderStateWithBlendMode:_blendMode shader:_shader shaderUniforms:self.shaderUniforms copyUniforms:copyUniforms];
 	}
 	
 	return _renderState;
@@ -85,18 +87,20 @@
 
 @property (nonatomic, readonly) GLuint FBO;
 @property (nonatomic, readonly) GLuint depthRenderBuffer;
+@property (nonatomic, readonly) GLuint stencilRenderBuffer;
 
 @end
 
 
 @implementation CCRenderTextureFBO
 
-- (id)initWithFBO:(GLuint)fbo depthRenderBuffer:(GLuint)depthBuffer
+- (id)initWithFBO:(GLuint)fbo depthRenderBuffer:(GLuint)depthBuffer stencilRenderBuffer:(GLuint)stencilRenderBuffer
 {
     if((self = [super init]))
     {
         _FBO = fbo;
         _depthRenderBuffer = depthBuffer;
+        _stencilRenderBuffer = stencilRenderBuffer;
     }
     return self;
 }
@@ -149,6 +153,7 @@
 		_pixelFormat = format;
 		_depthStencilFormat = depthStencilFormat;
 
+		// Flip the projection matrix on the y-axis since Cocos2D uses upside down textures.
 		_projection = GLKMatrix4MakeOrtho(0.0f, width, 0.0f, height, -1024.0f, 1024.0f);
 		
         CCRenderTextureSprite *rtSprite = [CCRenderTextureSprite spriteWithTexture:[CCTexture none]];
@@ -169,12 +174,14 @@
 
 -(void)create
 {
-	glPushGroupMarkerEXT(0, "CCRenderTexture: Create");
+    CGSize pixelSize = CGSizeMake(_contentSize.width * _contentScale, _contentSize.height * _contentScale);
+    [self createTextureAndFboWithPixelSize:pixelSize];
+}
+
+-(void)createTextureAndFboWithPixelSize:(CGSize)pixelSize
+{
+	CCGL_DEBUG_PUSH_GROUP_MARKER("CCRenderTexture: Create");
 	
-	int pixelW = _contentSize.width*_contentScale;
-	int pixelH = _contentSize.height*_contentScale;
-
-
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFBO);
 
 	// textures must be power of two
@@ -182,58 +189,124 @@
 	NSUInteger powH;
 
 	if( [[CCConfiguration sharedConfiguration] supportsNPOT] ) {
-		powW = pixelW;
-		powH = pixelH;
+		powW = pixelSize.width;
+		powH = pixelSize.height;
 	} else {
-		powW = CCNextPOT(pixelW);
-		powH = CCNextPOT(pixelH);
+		powW = CCNextPOT(pixelSize.width);
+		powH = CCNextPOT(pixelSize.height);
 	}
-
+    
 	void *data = calloc(powW*powH, 4);
 
-	CCTexture *texture = [[CCTexture alloc] initWithData:data pixelFormat:_pixelFormat pixelsWide:powW pixelsHigh:powH contentSizeInPixels:CGSizeMake(pixelW, pixelH) contentScale:_contentScale];
-    self.texture = texture;
-    
+	CCTexture *texture = [[CCTexture alloc] initWithData:data pixelFormat:_pixelFormat pixelsWide:powW pixelsHigh:powH contentSizeInPixels:pixelSize contentScale:_contentScale];
+	self.texture = texture;
 	free(data);
+	
+	// Render textures are nearest filtered for legacy reasons.
+	self.texture.antialiased = NO;
+	
+	CCRenderDispatch(NO, ^{
+		CCGL_DEBUG_PUSH_GROUP_MARKER("CCRenderTexture: Create");
+		
+		glGetIntegerv(GL_FRAMEBUFFER_BINDING, &_oldFBO);
+	
+		GLint oldRBO;
+		glGetIntegerv(GL_RENDERBUFFER_BINDING, &oldRBO);
 
-	GLint oldRBO;
-	glGetIntegerv(GL_RENDERBUFFER_BINDING, &oldRBO);
+		// generate FBO
+		GLuint fbo;
+		glGenFramebuffers(1, &fbo);
+		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		
+		// associate texture with FBO
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.name, 0);
 
-	// generate FBO
-	GLuint fbo;
-	glGenFramebuffers(1, &fbo);
-	glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+		GLuint depthRenderBuffer = 0;
+    GLuint stencilRenderBuffer = 0;
+    
+#if __CC_PLATFORM_ANDROID
+    
+    // Some android devices *only* support combined depth buffers (like all iOS devices), some android devices do not
+    // support combined depth buffers, thus we have to create a seperate stencil buffer
+    if(_depthStencilFormat)
+    {
+        //create and attach depth buffer
+		
+        if(![[CCConfiguration sharedConfiguration] supportsPackedDepthStencil])
+        {
+            glGenRenderbuffers(1, &depthRenderBuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
+            glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, (GLsizei)powW, (GLsizei)powH); //GL_DEPTH_COMPONENT24_OES
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
 
-	// associate texture with FBO
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.name, 0);
-
-	GLuint depthRenderBuffer = 0;
-	if(_depthStencilFormat){
-		//create and attach depth buffer
-		glGenRenderbuffers(1, &depthRenderBuffer);
-		glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
-		glRenderbufferStorage(GL_RENDERBUFFER, _depthStencilFormat, (GLsizei)powW, (GLsizei)powH);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
-
-		// if depth format is the one with stencil part, bind same render buffer as stencil attachment
-		if(_depthStencilFormat == GL_DEPTH24_STENCIL8){
-			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
+            // if depth format is the one with stencil part, bind same render buffer as stencil attachment
+            if(_depthStencilFormat == GL_DEPTH24_STENCIL8)
+            {
+                glGenRenderbuffers(1, &stencilRenderBuffer);
+                glBindRenderbuffer(GL_RENDERBUFFER, stencilRenderBuffer);
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, (GLsizei)powW, (GLsizei)powH);
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, stencilRenderBuffer);
+            }
+        }
+        else
+        {
+            glGenRenderbuffers(1, &depthRenderBuffer);
+            glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
+            glRenderbufferStorage(GL_RENDERBUFFER, _depthStencilFormat, (GLsizei)powW, (GLsizei)powH);
+            glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
+            
+            // if depth format is the one with stencil part, bind same render buffer as stencil attachment
+            if(_depthStencilFormat == GL_DEPTH24_STENCIL8){
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
+            }
+        }
 		}
-	}
     
-	// check if it worked (probably worth doing :) )
-	NSAssert( glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, @"Could not attach texture to framebuffer");
+#else
+		
+		if(_depthStencilFormat)
+			{
+			//create and attach depth buffer
+			glGenRenderbuffers(1, &depthRenderBuffer);
+			glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
+			glRenderbufferStorage(GL_RENDERBUFFER, _depthStencilFormat, (GLsizei)powW, (GLsizei)powH);
+			glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
 
-    _FBO = [[CCRenderTextureFBO alloc] initWithFBO:fbo depthRenderBuffer:depthRenderBuffer];
-    
-	[texture setAliasTexParameters];
+			// associate texture with FBO
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture.name, 0);
+
+			if(_depthStencilFormat){
+				//create and attach depth buffer
+				glGenRenderbuffers(1, &depthRenderBuffer);
+				glBindRenderbuffer(GL_RENDERBUFFER, depthRenderBuffer);
+				glRenderbufferStorage(GL_RENDERBUFFER, _depthStencilFormat, (GLsizei)powW, (GLsizei)powH);
+				glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
+
+				// if depth format is the one with stencil part, bind same render buffer as stencil attachment
+				if(_depthStencilFormat == GL_DEPTH24_STENCIL8){
+					glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, depthRenderBuffer);
+				}
+			}
+		}
+		
+#endif
 	
-	glBindRenderbuffer(GL_RENDERBUFFER, oldRBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, _oldFBO);
+		// check if it worked (probably worth doing :) )
+		NSAssert( glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, @"Could not attach texture to framebuffer");
+		
+		_FBO = [[CCRenderTextureFBO alloc] initWithFBO:fbo depthRenderBuffer:depthRenderBuffer stencilRenderBuffer:stencilRenderBuffer];
+		
+		glBindRenderbuffer(GL_RENDERBUFFER, oldRBO);
+		glBindFramebuffer(GL_FRAMEBUFFER, _oldFBO);
+		
+		CCGL_DEBUG_POP_GROUP_MARKER();
+		CC_CHECK_GL_ERROR_DEBUG();
+	});
 	
-	CC_CHECK_GL_ERROR_DEBUG();
-	glPopGroupMarkerEXT();
-	
+    // XXX Thayer says: I think this is incorrect for any situations where the content
+    // size type isn't (points, points). The call to setTextureRect below eventually arrives
+    // at some code that assumes the supplied size is in points so, if the size is not in points,
+    // things break.
 	CGRect rect = CGRectMake(0, 0, _contentSize.width, _contentSize.height);
 	
 	[self assignSpriteTexture];
@@ -256,17 +329,26 @@
 
 -(void)destroy
 {
-    GLuint fbo = _FBO.FBO;
-    glDeleteFramebuffers(1, &fbo);
+	GLuint fbo = _FBO.FBO;
+	GLuint depthRenderBuffer = _FBO.depthRenderBuffer;
+	GLuint stencilRenderBuffer = _FBO.stencilRenderBuffer;
 	
-    GLuint depthRenderBuffer = _FBO.depthRenderBuffer;
+	CCRenderDispatch(YES, ^{
+    glDeleteFramebuffers(1, &fbo);
+		
     if (depthRenderBuffer)
     {
         glDeleteRenderbuffers(1, &depthRenderBuffer);
     }
+    
+    if (depthRenderBuffer)
+    {
+        glDeleteRenderbuffers(1, &stencilRenderBuffer);
+    }
+	});
 
-    _FBO = nil;
-    self.texture = nil;
+	_FBO = nil;
+	self.texture = nil;
 }
 
 -(void)dealloc
@@ -360,9 +442,10 @@
 	[_renderer popGroupWithDebugLabel:@"CCRenderTexture begin/end" globalSortOrder:0];
 	
 	if(_privateRenderer){
-		[_renderer flush];
 		[CCRenderer bindRenderer:nil];
 		_privateRenderer = NO;
+		
+		CCRenderDispatch(_renderer.threadsafe, ^{[_renderer flush];});
 	} else {
 		_renderer.globalShaderUniforms = _oldGlobalUniforms;
 	}
@@ -464,8 +547,7 @@
 	}
 	
     [self begin];
-    [_renderer enqueueBlock:^
-    {
+    [_renderer enqueueBlock:^{
         glReadPixels(0,0,tx,ty,GL_RGBA,GL_UNSIGNED_BYTE, buffer);
     } globalSortOrder:NSIntegerMax debugLabel:@"CCRenderTexture reading pixels for new image" threadSafe:NO];
     [self end];
@@ -513,7 +595,10 @@
 
 -(BOOL)saveToFile:(NSString*)fileName format:(CCRenderTextureImageFormat)format
 {
-    NSString *fullPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:fileName];
+	BOOL success = YES;
+	
+	NSString *fullPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:fileName];
+
     return [self saveToFilePath:fullPath format:format];
 }
 
@@ -524,7 +609,7 @@
 
 - (BOOL)saveToFilePath:(NSString *)filePath format:(CCRenderTextureImageFormat)format
 {
-    BOOL success;
+    BOOL success = NO;
 
    	CGImageRef imageRef = [self newCGImage];
 
@@ -618,11 +703,13 @@
     // TODO: Fix CCRenderTexture so that it correctly handles this
 	// NSAssert(NO, @"You cannot change the content size of an already created CCRenderTexture. Recreate it");
     [super setContentSize:size];
+    
+    // XXX Thayer says: I'm pretty sure this is broken since the supplied content size could
+    // be normalized, in points, in UI points, etc. We should get the size in points then convert
+    // to pixels and use that to make the ortho matrix.
 	_projection = GLKMatrix4MakeOrtho(0.0f, size.width, 0.0f, size.height, -1024.0f, 1024.0f);
     _contentSizeChanged = YES;
-
 }
 
-
-
 @end
+

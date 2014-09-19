@@ -314,7 +314,7 @@
 								<key>type</key>
 								<string>Float</string>
 								<key>value</key>
-								<real>0.61333334445953369</real>
+								<real>0.80000001192092896</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -326,7 +326,7 @@
 									<real>1</real>
 									<real>1</real>
 									<real>1</real>
-									<real>0.61333334445953369</real>
+									<real>0.80000001192092896</real>
 								</array>
 							</dict>
 						</array>
@@ -946,7 +946,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>25.502649307250977</real>
+									<real>28</real>
 									<integer>0</integer>
 									<integer>0</integer>
 									<integer>0</integer>
@@ -1100,7 +1100,7 @@
 									<key>easing</key>
 									<dict>
 										<key>opt</key>
-										<real>0.10000000149011612</real>
+										<real>0.30000001192092896</real>
 										<key>type</key>
 										<integer>6</integer>
 									</dict>
@@ -1228,7 +1228,7 @@
 						<key>value</key>
 						<array>
 							<real>14</real>
-							<real>0.067657046020030975</real>
+							<real>0.067000001668930054</real>
 							<integer>1</integer>
 							<integer>0</integer>
 							<integer>2</integer>
@@ -1291,8 +1291,6 @@
 						</array>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 			<dict>
 				<key>UUID</key>
@@ -1435,7 +1433,7 @@
 						<key>value</key>
 						<array>
 							<real>14</real>
-							<real>0.068234801292419434</real>
+							<real>0.067000001668930054</real>
 							<integer>2</integer>
 							<integer>0</integer>
 							<integer>2</integer>
@@ -1656,7 +1654,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.76666665077209473</real>
+			<real>1</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

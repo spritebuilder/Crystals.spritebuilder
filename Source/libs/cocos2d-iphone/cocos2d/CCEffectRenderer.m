@@ -51,7 +51,7 @@
 {
     NSAssert(!_glResourcesAllocated, @"");
     
-    glPushGroupMarkerEXT(0, "CCEffectRenderTarget: allocateRenderTarget");
+    CCGL_DEBUG_PUSH_GROUP_MARKER("CCEffectRenderTarget: allocateRenderTarget");
     
 	// Textures may need to be a power of two
 	NSUInteger powW;
@@ -73,7 +73,7 @@
     // Create a new texture object for use as the color attachment of the new
     // FBO.
 	_texture = [[CCTexture alloc] initWithData:nil pixelFormat:kRenderTargetDefaultPixelFormat pixelsWide:powW pixelsHigh:powH contentSizeInPixels:size contentScale:[CCDirector sharedDirector].contentScaleFactor];
-	[_texture setAliasTexParameters];
+	_texture.antialiased = NO;
 	
     // Save the old FBO binding so it can be restored after we create the new
     // one.
@@ -94,7 +94,7 @@
 	glBindFramebuffer(GL_FRAMEBUFFER, oldFBO);
 	
 	CC_CHECK_GL_ERROR_DEBUG();
-	glPopGroupMarkerEXT();
+	CCGL_DEBUG_POP_GROUP_MARKER();
     
     _glResourcesAllocated = YES;
     return YES;
@@ -206,7 +206,7 @@
         }
         else
         {
-            BOOL inverted;
+            bool inverted;
             
             GLKMatrix4 renderTargetProjection = GLKMatrix4MakeOrtho(0.0f, _contentSize.width, 0.0f, _contentSize.height, -1024.0f, 1024.0f);
             GLKMatrix4 invRenderTargetProjection = GLKMatrix4Invert(renderTargetProjection, &inverted);

@@ -19,10 +19,10 @@ static CCEffectReflection* _crystalEffect = NULL;
     
     if (!_crystalEffect)
     {
-        _crystalEffect = [CCEffectReflection effectWithShininess:1 environment:gs.reflectionMap];
+//        _crystalEffect = [CCEffectReflection effectWithShininess:1 environment:gs.reflectionMap];
         
-        _crystalEffect.fresnelBias = 0.07;
-        _crystalEffect.fresnelPower = 0.7;
+//        _crystalEffect.fresnelBias = 0.07;
+//        _crystalEffect.fresnelPower = 0.7;
     }
     
     return _crystalEffect;

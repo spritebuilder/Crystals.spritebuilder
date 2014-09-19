@@ -9,7 +9,9 @@
 #endif
 
 #ifdef __OBJC__
+#if !defined(ANDROID)
 #import <UIKit/UIKit.h>
+#endif
 #import <Foundation/Foundation.h>
 #import "cocos2d.h"
 #import "cocos2d-ui.h"

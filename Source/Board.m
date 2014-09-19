@@ -109,7 +109,7 @@
 
 #pragma mark Handle Touches
 
-- (void) touchBegan:(UITouch *)touch withEvent:(UIEvent *)event
+- (void) touchBegan:(CCTouch *)touch withEvent:(CCTouchEvent *)event
 {
     CGPoint loc = [touch locationInNode:self];
     
@@ -153,6 +153,7 @@
         [self endBonusMode];
     }
 }
+
 
 #pragma mark Game Modes
 
