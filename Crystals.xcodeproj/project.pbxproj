@@ -17,6 +17,8 @@
 		3C57E0A0199AC1DE000EAD96 /* GameScene.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C57E096199AC1DE000EAD96 /* GameScene.m */; };
 		3C57E0A1199AC1DE000EAD96 /* PauseLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C57E098199AC1DE000EAD96 /* PauseLayer.m */; };
 		3C57E0A2199AC1DE000EAD96 /* PauseLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C57E098199AC1DE000EAD96 /* PauseLayer.m */; };
+		3C79AB9A19D78EC600B688AA /* product_ids.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C79AB9919D78EC600B688AA /* product_ids.plist */; };
+		3C79AB9D19D794FD00B688AA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C79AB9C19D794FD00B688AA /* StoreKit.framework */; };
 		5B1210061974825D004C1E1D /* libcocos2dAndroid.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B121001197481CE004C1E1D /* libcocos2dAndroid.a */; };
 		5B12100C19748281004C1E1D /* BridgeKitV3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12100B19748281004C1E1D /* BridgeKitV3.framework */; };
 		5B121029197484DA004C1E1D /* BridgeKitV3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12100B19748281004C1E1D /* BridgeKitV3.framework */; };
@@ -143,6 +145,8 @@
 		3C57E096199AC1DE000EAD96 /* GameScene.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GameScene.m; path = Source/GameScene.m; sourceTree = "<group>"; };
 		3C57E097199AC1DE000EAD96 /* PauseLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PauseLayer.h; path = Source/PauseLayer.h; sourceTree = "<group>"; };
 		3C57E098199AC1DE000EAD96 /* PauseLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PauseLayer.m; path = Source/PauseLayer.m; sourceTree = "<group>"; };
+		3C79AB9919D78EC600B688AA /* product_ids.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = product_ids.plist; sourceTree = "<group>"; };
+		3C79AB9C19D794FD00B688AA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		5B12100919748273004C1E1D /* libEGL.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libEGL.so; path = /usr/lib/armv7a/libEGL.so; sourceTree = SDKROOT; };
 		5B12100B19748281004C1E1D /* BridgeKitV3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeKitV3.framework; path = System/Library/Frameworks/BridgeKitV3.framework; sourceTree = SDKROOT; };
 		5B12100F197483EE004C1E1D /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
@@ -150,7 +154,7 @@
 		5B121013197483EE004C1E1D /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
 		5B121015197483EE004C1E1D /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
 		5B12101B19748413004C1E1D /* CrystalsActivity.java */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.java; path = CrystalsActivity.java; sourceTree = "<group>"; };
-		5B121021197484A3004C1E1D /* Crystals Java.jar */ = {isa = PBXFileReference; explicitFileType = compiled.java.jar; includeInIndex = 0; path = "Crystals Java.jar"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5B121021197484A3004C1E1D /* Crystals Java.jar */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = archive.jar; path = "Crystals Java.jar"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5B12102E197484FA004C1E1D /* CrystalsActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CrystalsActivity.h; path = Source/CrystalsActivity.h; sourceTree = "<group>"; };
 		5B12102F197484FA004C1E1D /* CrystalsActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CrystalsActivity.m; path = Source/CrystalsActivity.m; sourceTree = "<group>"; };
 		5B121033197485FE004C1E1D /* Android-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Android-Info.plist"; sourceTree = "<group>"; };
@@ -220,6 +224,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C79AB9D19D794FD00B688AA /* StoreKit.framework in Frameworks */,
 				8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */,
 				B737898A1807642B0076A88C /* libcocos2d.a in Frameworks */,
 				B77F1B3217B978D7009739AE /* QuartzCore.framework in Frameworks */,
@@ -401,6 +406,7 @@
 		B77F1B3017B978D7009739AE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3C79AB9C19D794FD00B688AA /* StoreKit.framework */,
 				5B12100B19748281004C1E1D /* BridgeKitV3.framework */,
 				5B12100919748273004C1E1D /* libEGL.so */,
 				8392007918EE8E3300B6C429 /* GLKit.framework */,
@@ -428,6 +434,7 @@
 				B73789911807667A0076A88C /* Icons */,
 				B737893A180761570076A88C /* Published-iOS */,
 				B78A0B0F198AF87200C63841 /* Published-Android */,
+				3C79AB9919D78EC600B688AA /* product_ids.plist */,
 			);
 			name = Resources;
 			path = Source/Resources;
@@ -556,7 +563,7 @@
 		};
 		5B121003197481CE004C1E1D /* cocos2dJava.jar */ = {
 			isa = PBXReferenceProxy;
-			fileType = compiled.java.jar;
+			fileType = archive.jar;
 			path = cocos2dJava.jar;
 			remoteRef = 5B121002197481CE004C1E1D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -608,6 +615,7 @@
 				B7378976180762440076A88C /* Default-Landscape~ipad.png in Resources */,
 				B71F5915188484E7003F4D28 /* iPhone-old.png in Resources */,
 				B71F5917188484E7003F4D28 /* iPhone.png in Resources */,
+				3C79AB9A19D78EC600B688AA /* product_ids.plist in Resources */,
 				B7378975180762440076A88C /* Default-568h@2x.png in Resources */,
 				B71F5918188484E7003F4D28 /* iPhone@2x.png in Resources */,
 				B7378977180762440076A88C /* Default.png in Resources */,
