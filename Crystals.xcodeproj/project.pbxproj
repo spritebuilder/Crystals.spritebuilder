@@ -19,6 +19,7 @@
 		3C57E0A2199AC1DE000EAD96 /* PauseLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C57E098199AC1DE000EAD96 /* PauseLayer.m */; };
 		3C79AB9A19D78EC600B688AA /* product_ids.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3C79AB9919D78EC600B688AA /* product_ids.plist */; };
 		3C79AB9D19D794FD00B688AA /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C79AB9C19D794FD00B688AA /* StoreKit.framework */; };
+		3CB3F18919D8BB32007B2CBB /* StoreKitDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CB3F18819D8BB32007B2CBB /* StoreKitDelegate.m */; };
 		5B1210061974825D004C1E1D /* libcocos2dAndroid.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B121001197481CE004C1E1D /* libcocos2dAndroid.a */; };
 		5B12100C19748281004C1E1D /* BridgeKitV3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12100B19748281004C1E1D /* BridgeKitV3.framework */; };
 		5B121029197484DA004C1E1D /* BridgeKitV3.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B12100B19748281004C1E1D /* BridgeKitV3.framework */; };
@@ -147,6 +148,8 @@
 		3C57E098199AC1DE000EAD96 /* PauseLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PauseLayer.m; path = Source/PauseLayer.m; sourceTree = "<group>"; };
 		3C79AB9919D78EC600B688AA /* product_ids.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = product_ids.plist; sourceTree = "<group>"; };
 		3C79AB9C19D794FD00B688AA /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		3CB3F18719D8BB32007B2CBB /* StoreKitDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StoreKitDelegate.h; path = Source/StoreKitDelegate.h; sourceTree = "<group>"; };
+		3CB3F18819D8BB32007B2CBB /* StoreKitDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = StoreKitDelegate.m; path = Source/StoreKitDelegate.m; sourceTree = "<group>"; };
 		5B12100919748273004C1E1D /* libEGL.so */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libEGL.so; path = /usr/lib/armv7a/libEGL.so; sourceTree = SDKROOT; };
 		5B12100B19748281004C1E1D /* BridgeKitV3.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = BridgeKitV3.framework; path = System/Library/Frameworks/BridgeKitV3.framework; sourceTree = SDKROOT; };
 		5B12100F197483EE004C1E1D /* ic_launcher.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ic_launcher.png; sourceTree = "<group>"; };
@@ -346,6 +349,8 @@
 				B7378993180767190076A88C /* MainScene.m */,
 				3C57E097199AC1DE000EAD96 /* PauseLayer.h */,
 				3C57E098199AC1DE000EAD96 /* PauseLayer.m */,
+				3CB3F18719D8BB32007B2CBB /* StoreKitDelegate.h */,
+				3CB3F18819D8BB32007B2CBB /* StoreKitDelegate.m */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -563,7 +568,7 @@
 		};
 		5B121003197481CE004C1E1D /* cocos2dJava.jar */ = {
 			isa = PBXReferenceProxy;
-			fileType = archive.jar;
+			fileType = compiled.java.jar;
 			path = cocos2dJava.jar;
 			remoteRef = 5B121002197481CE004C1E1D /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
@@ -683,6 +688,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3CB3F18919D8BB32007B2CBB /* StoreKitDelegate.m in Sources */,
 				3C57E09D199AC1DE000EAD96 /* GameGlobals.m in Sources */,
 				3C57E09B199AC1DE000EAD96 /* Crystal.m in Sources */,
 				3C57E0A1199AC1DE000EAD96 /* PauseLayer.m in Sources */,
@@ -833,7 +839,7 @@
 				);
 				PRODUCT_NAME = CrystalsAndroid;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = sbpbeta;
+				SDKROOT = sbandroid;
 				WRAPPER_EXTENSION = app;
 				opengles2 = YES;
 			};
@@ -879,7 +885,7 @@
 				);
 				PRODUCT_NAME = CrystalsAndroid;
 				PROVISIONING_PROFILE = "";
-				SDKROOT = sbpbeta;
+				SDKROOT = sbandroid;
 				VALIDATE_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 				opengles2 = YES;
