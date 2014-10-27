@@ -23,6 +23,7 @@
 		5B121030197484FA004C1E1D /* CrystalsActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B12102F197484FA004C1E1D /* CrystalsActivity.m */; };
 		5B121038197487F2004C1E1D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = B737893E1807617C0076A88C /* AppDelegate.m */; };
 		7A0A290E19FF00F000B02154 /* libcocos2dAndroid.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0A28FE19FF006600B02154 /* libcocos2dAndroid.a */; };
+		7A0A291119FF020500B02154 /* libcocos2d.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7A0A28FC19FF006600B02154 /* libcocos2d.a */; };
 		8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8392007918EE8E3300B6C429 /* GLKit.framework */; };
 		927F619E196C771E000F43EF /* MainScene.m in Sources */ = {isa = PBXBuildFile; fileRef = B7378993180767190076A88C /* MainScene.m */; };
 		927F61A5196C771E000F43EF /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B77F1B3517B978D7009739AE /* OpenAL.framework */; };
@@ -122,6 +123,13 @@
 			remoteGlobalIDString = D2FEB60D194F6C9E00FC0574;
 			remoteInfo = cocos2dAndroid;
 		};
+		7A0A290F19FF01FE00B02154 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B7378940180761A80076A88C /* cocos2d.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 5018F24C0DFDEAC400C013A5;
+			remoteInfo = "cocos2d-ios";
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
@@ -212,6 +220,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A0A291119FF020500B02154 /* libcocos2d.a in Frameworks */,
 				8392007A18EE8E3300B6C429 /* GLKit.framework in Frameworks */,
 				B77F1B3217B978D7009739AE /* QuartzCore.framework in Frameworks */,
 				B77F1B3417B978D7009739AE /* OpenGLES.framework in Frameworks */,
@@ -486,6 +495,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				7A0A291019FF01FE00B02154 /* PBXTargetDependency */,
 			);
 			name = "Crystals iOS";
 			productName = Example;
@@ -700,6 +710,11 @@
 			isa = PBXTargetDependency;
 			name = cocos2dAndroid;
 			targetProxy = 7A0A290C19FF00EB00B02154 /* PBXContainerItemProxy */;
+		};
+		7A0A291019FF01FE00B02154 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = "cocos2d-ios";
+			targetProxy = 7A0A290F19FF01FE00B02154 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
