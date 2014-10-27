@@ -90,7 +90,10 @@
 			<integer>0</integer>
 		</dict>
 		<key>Sprites</key>
-		<dict/>
+		<dict>
+			<key>isSmartSpriteSheet</key>
+			<true/>
+		</dict>
 		<key>Sprites/button-pause.png</key>
 		<dict/>
 		<key>ccbResources</key>
@@ -177,11 +180,11 @@
 		</dict>
 	</dict>
 	<key>versionStr</key>
-	<string>dcf_hash : b95fb9e402
-revision : bc1aa0de9e
-version : 1.3.0-beta.02
-dcf_tag : release_3.0.0-alpha.4
-sku : pro
+	<string>dcf_hash : undefined
+revision : 3d38095059
+version : 1.x
+dcf_tag : undefined
+sku : default
 </string>
 </dict>
 </plist>
