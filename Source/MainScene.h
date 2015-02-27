@@ -12,5 +12,6 @@
 {
     CCLabelTTF* _lblHighScore;
     CCLabelTTF* _lblLastScore;
+    CCButton* _btnPlay;
 }
 @end

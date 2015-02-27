@@ -40,6 +40,11 @@
     int _score;
     NSMutableArray* _gameOverCrystals;
     BOOL _startedEndTimer;
+    
+    // Hint highlights
+    BOOL _hintMode;
+    NSArray* _hintCrystals;
+    long _hintModeStartFrame;
 }
 
 @property (nonatomic,readonly) int score;

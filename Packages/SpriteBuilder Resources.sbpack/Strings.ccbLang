@@ -5,12 +5,55 @@
 	<key>activeLanguages</key>
 	<array>
 		<string>en</string>
+		<string>sv</string>
+		<string>zh-Hans</string>
 	</array>
 	<key>fileType</key>
 	<string>SpriteBuilderTranslations</string>
 	<key>fileVersion</key>
 	<integer>1</integer>
 	<key>translations</key>
-	<array/>
+	<array>
+		<dict>
+			<key>key</key>
+			<string>CONTINUE</string>
+			<key>translations</key>
+			<dict>
+				<key>en</key>
+				<string>CONTINUE</string>
+				<key>sv</key>
+				<string>FORTSÄTT</string>
+				<key>zh-Hans</key>
+				<string>继续
+</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>key</key>
+			<string>GIVE UP</string>
+			<key>translations</key>
+			<dict>
+				<key>en</key>
+				<string>GIVE UP</string>
+				<key>sv</key>
+				<string>GE UPP</string>
+				<key>zh-Hans</key>
+				<string>放弃</string>
+			</dict>
+		</dict>
+		<dict>
+			<key>key</key>
+			<string>PAUSED</string>
+			<key>translations</key>
+			<dict>
+				<key>en</key>
+				<string>PAUSED</string>
+				<key>sv</key>
+				<string>PAUSAT</string>
+				<key>zh-Hans</key>
+				<string>停顿</string>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

@@ -22,7 +22,11 @@
 
 @property (nonatomic,assign) float xSpeed;
 
+@property (nonatomic,assign) BOOL hintMode;
+
 + (Crystal*) crystalOfType:(int)type;
+
++ (CCEffectBrightness*) sharedBrightnessHintEffect;
 
 + (void) cleanup;
 

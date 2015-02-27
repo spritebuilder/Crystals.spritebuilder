@@ -15,7 +15,7 @@
 {
     [OALSimpleAudio sharedInstance];
     
-    [[CCDirector sharedDirector] setDisplayStats:YES];
+    //[[CCDirector sharedDirector] setDisplayStats:YES];
     
     // Popuplate score labels
     GameGlobals* g = [GameGlobals globals];
@@ -29,6 +29,7 @@
     [[OALSimpleAudio sharedInstance] playEffect:@"Sounds/click.wav"];
     
     [self.animationManager runAnimationsForSequenceNamed:@"outro"];
+    [_btnPlay setEnabled:NO];
 }
 
 - (void) outroCompleted

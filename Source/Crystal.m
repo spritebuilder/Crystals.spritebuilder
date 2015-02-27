@@ -10,8 +10,15 @@
 #import "GameScene.h"
 
 static CCEffectReflection* _crystalEffect = NULL;
+static CCEffectReflection* _crystalHintEffect = NULL;
+static CCEffectBrightness* _lightingEffect = NULL;
 
 @implementation Crystal
+
++ (CCEffectBrightness*) sharedBrightnessHintEffect
+{
+    return _lightingEffect;
+}
 
 + (CCEffect*) sharedCrystalEffect
 {
@@ -26,6 +33,25 @@ static CCEffectReflection* _crystalEffect = NULL;
     }
     
     return _crystalEffect;
+}
+
++ (CCEffect*) sharedCrystalHintEffect
+{
+    GameScene* gs = [GameScene currentGameScene];
+    
+    if (!_crystalHintEffect)
+    {
+        CCEffectReflection *crystalEffect = [CCEffectReflection effectWithShininess:1 environment:gs.reflectionMap];
+        
+        crystalEffect.fresnelBias = 0.07;
+        crystalEffect.fresnelPower = 0.7;
+        
+        _lightingEffect = [CCEffectBrightness effectWithBrightness:0.5];
+        
+        _crystalHintEffect = [CCEffectStack effects:crystalEffect,_lightingEffect, nil];
+    }
+    
+    return _crystalHintEffect;
 }
 
 + (void) cleanup
@@ -82,6 +108,23 @@ static CCEffectReflection* _crystalEffect = NULL;
     _xSpeed = CCRANDOM_MINUS1_1() * 4;
     
     _gameOver = YES;
+}
+
+- (void) setHintMode:(BOOL)hintMode
+{
+    if (_hintMode != hintMode)
+    {
+        if (hintMode)
+        {
+            self.effect = [Crystal sharedCrystalHintEffect];
+        }
+        else
+        {
+            self.effect = [Crystal sharedCrystalEffect];
+        }
+        
+        _hintMode = hintMode;
+    }
 }
 
 @end

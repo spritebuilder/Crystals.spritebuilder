@@ -156,6 +156,17 @@
 					</dict>
 					<dict>
 						<key>name</key>
+						<string>normalMapSpriteFrame</string>
+						<key>type</key>
+						<string>SpriteFrame</string>
+						<key>value</key>
+						<array>
+							<string></string>
+							<string></string>
+						</array>
+					</dict>
+					<dict>
+						<key>name</key>
 						<string>color</string>
 						<key>type</key>
 						<string>Color3</string>
@@ -166,6 +177,14 @@
 							<real>1</real>
 							<real>1</real>
 						</array>
+					</dict>
+					<dict>
+						<key>name</key>
+						<string>effects</string>
+						<key>type</key>
+						<string>EffectControl</string>
+						<key>value</key>
+						<array/>
 					</dict>
 				</array>
 				<key>seqExpanded</key>
@@ -287,7 +306,7 @@
 						<key>value</key>
 						<array>
 							<string>CONTINUE</string>
-							<false/>
+							<true/>
 						</array>
 					</dict>
 					<dict>
@@ -615,7 +634,7 @@
 						<key>value</key>
 						<array>
 							<string>GIVE UP</string>
-							<false/>
+							<true/>
 						</array>
 					</dict>
 					<dict>
@@ -896,7 +915,7 @@
 						<key>value</key>
 						<array>
 							<string>PAUSED</string>
-							<false/>
+							<true/>
 						</array>
 					</dict>
 					<dict>
@@ -1031,6 +1050,8 @@
 						</array>
 					</dict>
 				</array>
+				<key>selected</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>

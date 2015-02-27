@@ -11,6 +11,7 @@
 #import "Crystal.h"
 
 #define FRAMES_UNTIL_CONSECUTIVE_MOVES_RESET 60
+#define FRAMES_UNTIL_HINT 180
 #define MAX_CONSECUTIVE_MOVES 5
 #define BONUS_MODE_NUM_CYCLE_FRAMES 60
 #define GAME_DURATION (60 * 60 + 130)
@@ -103,13 +104,19 @@
     
     [self updateTimeDisplay];
     
+    if (_frame - _lastMoveFrame > FRAMES_UNTIL_HINT)
+    {
+        [self startHintMode];
+    }
+    
+    [self animateHintMode];
+    
     // Increment frame count
     _frame++;
 }
 
 #pragma mark Handle Touches
-
-- (void) touchBegan:(UITouch *)touch withEvent:(UIEvent *)event
+- (void) touchBegan:(CCTouch *)touch withEvent:(CCTouchEvent *)event
 {
     CGPoint loc = [touch locationInNode:self];
     
@@ -122,6 +129,9 @@
     
     if (crystals.count >= 3)
     {
+        // End hint mode
+        [self endHintMode];
+        
         [self removeCrystals:crystals];
         
         // Increment consecutive moves
@@ -211,6 +221,51 @@
     {
         _bonusModeEffect.brightness = 1.0 - cyclePos;
     }
+}
+
+- (void) startHintMode
+{
+    if (_hintMode) return;
+    
+    for (Crystal* crystal in _hintCrystals)
+    {
+        crystal.hintMode = YES;
+    }
+    
+    _hintMode = YES;
+    _hintModeStartFrame = _frame;
+}
+
+- (void) animateHintMode
+{
+    if (!_hintMode) return;
+    
+    long frame = _frame - _hintModeStartFrame;
+    
+    // Normalized position in brightness cycle
+    float cyclePos = frame % BONUS_MODE_NUM_CYCLE_FRAMES;
+    cyclePos = cyclePos / (float) BONUS_MODE_NUM_CYCLE_FRAMES;
+    
+    if (cyclePos < 0.5)
+    {
+        [Crystal sharedBrightnessHintEffect].brightness = cyclePos;
+    }
+    else
+    {
+        [Crystal sharedBrightnessHintEffect].brightness = 1.0 - cyclePos;
+    }
+}
+
+- (void) endHintMode
+{
+    if (!_hintMode) return;
+    
+    for (Crystal* crystal in _hintCrystals)
+    {
+        crystal.hintMode = NO;
+    }
+    
+    _hintMode = NO;
 }
 
 #pragma mark Actions on Board
@@ -453,7 +508,12 @@
     {
         for (int j = 0; j < BOARD_HEIGHT; j++)
         {
-            if ([self connectedCrystalsAtPosX:i Y:j].count >= 3) return YES;
+            NSArray* connectedCrystals = [self connectedCrystalsAtPosX:i Y:j];
+            if (connectedCrystals.count >= 3)
+            {
+                _hintCrystals = connectedCrystals;
+                return YES;
+            }
         }
     }
     

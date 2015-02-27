@@ -21,7 +21,7 @@
 	<key>engine</key>
 	<integer>0</integer>
 	<key>excludedFromPackageMigration</key>
-	<integer>0</integer>
+	<false/>
 	<key>exporter</key>
 	<string>ccbi</string>
 	<key>fileType</key>
@@ -78,20 +78,7 @@
 			<key>previewFolderHidden</key>
 			<true/>
 		</dict>
-		<key>Sounds/timer.wav</key>
-		<dict>
-			<key>format_android_sound</key>
-			<integer>0</integer>
-			<key>format_android_sound_quality</key>
-			<integer>0</integer>
-			<key>format_ios_sound</key>
-			<integer>0</integer>
-			<key>format_ios_sound_quality</key>
-			<integer>0</integer>
-		</dict>
 		<key>Sprites</key>
-		<dict/>
-		<key>Sprites/button-pause.png</key>
 		<dict/>
 		<key>ccbResources</key>
 		<dict>
@@ -177,8 +164,9 @@
 		</dict>
 	</dict>
 	<key>versionStr</key>
-	<string>Version: 1.2.0-beta
-GitHub: 2530b2fba8
+	<string>revision : eab2ccace4
+sku : default
+version : 1.4.8
 </string>
 </dict>
 </plist>

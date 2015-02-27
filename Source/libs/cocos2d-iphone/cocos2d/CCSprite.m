@@ -38,7 +38,7 @@
 #import "Support/CGPointExtension.h"
 #import "Support/CCProfiling.h"
 #import "CCNode_Private.h"
-#import "CCRenderer_private.h"
+#import "CCRenderer_Private.h"
 #import "CCSprite_Private.h"
 #import "CCTexture_Private.h"
 
@@ -59,37 +59,37 @@
 	BOOL _flipX, _flipY;
 }
 
-+(id)spriteWithImageNamed:(NSString*)imageName
++(instancetype)spriteWithImageNamed:(NSString*)imageName
 {
     return [[self alloc] initWithImageNamed:imageName];
 }
 
-+(id)spriteWithTexture:(CCTexture*)texture
++(instancetype)spriteWithTexture:(CCTexture*)texture
 {
 	return [[self alloc] initWithTexture:texture];
 }
 
-+(id)spriteWithTexture:(CCTexture*)texture rect:(CGRect)rect
++(instancetype)spriteWithTexture:(CCTexture*)texture rect:(CGRect)rect
 {
 	return [[self alloc] initWithTexture:texture rect:rect];
 }
 
-+(id)spriteWithFile:(NSString*)filename
++(instancetype)spriteWithFile:(NSString*)filename
 {
 	return [[self alloc] initWithFile:filename];
 }
 
-+(id)spriteWithFile:(NSString*)filename rect:(CGRect)rect
++(instancetype)spriteWithFile:(NSString*)filename rect:(CGRect)rect
 {
 	return [[self alloc] initWithFile:filename rect:rect];
 }
 
-+(id)spriteWithSpriteFrame:(CCSpriteFrame*)spriteFrame
++(instancetype)spriteWithSpriteFrame:(CCSpriteFrame*)spriteFrame
 {
 	return [[self alloc] initWithSpriteFrame:spriteFrame];
 }
 
-+(id)spriteWithSpriteFrameName:(NSString*)spriteFrameName
++(instancetype)spriteWithSpriteFrameName:(NSString*)spriteFrameName
 {
 	CCSpriteFrame *frame = [[CCSpriteFrameCache sharedSpriteFrameCache] spriteFrameByName:spriteFrameName];
 
@@ -97,12 +97,12 @@
 	return [self spriteWithSpriteFrame:frame];
 }
 
-+(id)spriteWithCGImage:(CGImageRef)image key:(NSString*)key
++(instancetype)spriteWithCGImage:(CGImageRef)image key:(NSString*)key
 {
 	return [[self alloc] initWithCGImage:image key:key];
 }
 
-+(id) emptySprite
++(instancetype) emptySprite
 {
     return [[self alloc] init];
 }
@@ -131,8 +131,6 @@
 		
 		[self setTexture:texture];
 		[self setTextureRect:rect rotated:rotated untrimmedSize:rect.size];
-        
-        _effectRenderer = [[CCEffectRenderer alloc] init];
 	}
 	
 	return self;
@@ -436,14 +434,18 @@
 
 -(void)setEffect:(CCEffect *)effect
 {
-    _effect = effect;
-    if (effect)
-    {
-        [self updateShaderUniformsFromEffect];
-    }
-    else
-    {
-        _shaderUniforms = nil;
+    if(effect != _effect){
+        _effect = effect;
+        
+        if(effect){
+            if(_effectRenderer == nil){
+                _effectRenderer = [[CCEffectRenderer alloc] init];
+            }
+            
+            [self updateShaderUniformsFromEffect];
+        } else {
+            _shaderUniforms = nil;
+        }
     }
 }
 
@@ -517,7 +519,7 @@
                           } mutableCopy];
     
     // And then copy the new effect's uniforms into the node's uniforms dictionary.
-    [_shaderUniforms addEntriesFromDictionary:_effect.shaderUniforms];
+    [_shaderUniforms addEntriesFromDictionary:_effect.effectImpl.shaderUniforms];
 }
 
 @end
