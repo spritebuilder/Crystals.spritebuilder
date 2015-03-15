@@ -599,7 +599,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 927F61BC196C771E000F43EF /* Build configuration list for PBXNativeTarget "Crystals Android" */;
 			buildPhases = (
-				927F619B196C771E000F43EF /* Run Script */,
 				927F619C196C771E000F43EF /* Sources */,
 				927F61A0196C771E000F43EF /* Frameworks */,
 				927F61AC196C771E000F43EF /* Resources */,
@@ -618,7 +617,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B77F1CDE17B978D8009739AE /* Build configuration list for PBXNativeTarget "Crystals iOS" */;
 			buildPhases = (
-				D2E0167A18D782EC00927430 /* Run Script */,
 				B77F1B2A17B978D7009739AE /* Sources */,
 				B77F1B2B17B978D7009739AE /* Frameworks */,
 				D352B47A19EC5D8A00829775 /* Compile Metal Shaders */,
@@ -784,34 +782,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		927F619B196C771E000F43EF /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "osascript -e 'tell application \"System Events\"' -e 'set ProcessList to name of every process' -e 'if \"SpriteBuilder\" is in ProcessList then' -e 'tell application \"SpriteBuilder\" to publish' -e 'end if' -e 'end tell'";
-		};
-		D2E0167A18D782EC00927430 /* Run Script */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Run Script";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# osascript -e 'tell application \"System Events\"' -e 'set ProcessList to name of every process' -e 'if \"SpriteBuilder\" is in ProcessList then' -e 'tell application \"SpriteBuilder\" to publish' -e 'end if' -e 'end tell'";
-		};
 		D352B47A19EC5D8A00829775 /* Compile Metal Shaders */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
